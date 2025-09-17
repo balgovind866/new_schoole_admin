@@ -2,13 +2,16 @@ import { useFormikContext, Field, ErrorMessage } from "formik";
 import { ICreateStudent } from "../CreateStudentWizartHelper";
 
 export const PersonalInfo = () => {
+
   const { values } = useFormikContext<ICreateStudent>();
+  // Print form values to the console for debugging
   console.log("Form Values:", values);
 
   return (
     <div className="container">
   <h4 className="mb-4">Student Personal Info</h4>
 
+  {/* Update CSS for better spacing and layout */}
   {/* Registration Number - Full Width */}
   <div className="mb-3">
     <label className="form-label">Registration Number</label>
