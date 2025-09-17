@@ -1,20 +1,16 @@
-import {FC, useRef, useState, useEffect} from "react";
-import {Form, Formik, FormikHelpers} from "formik";
-import {Content} from "../../../../_metronic/layout/components/content";
-import {ToolbarWrapper} from "../../../../_metronic/layout/components/toolbar";
-import {KTIcon} from "../../../../_metronic/helpers";
-import {
-  createStudentSchemas,
-  inits,
-  ICreateStudent,
-} from "../CreateStudentWizartHelper";
-import {AddressInfo} from "../steps/AddressInfo";
+import { FC, useRef, useState, useEffect } from "react"
+import { Form, Formik, FormikHelpers } from "formik"
+import { Content } from "../../../../_metronic/layout/components/content"
+import { ToolbarWrapper } from "../../../../_metronic/layout/components/toolbar"
+import { KTIcon } from "../../../../_metronic/helpers"
+import { createStudentSchemas, inits, ICreateStudent } from "../CreateStudentWizartHelper"
+import { AddressInfo } from "../steps/AddressInfo"
 // Import other step components
-import {PersonalInfo} from "../steps/StudentInfo";
-import {ParentInfo} from "../steps/ParentsInfo";
-import {FeesInfo} from "../steps/FeesInfo";
-import {DocumentInfo} from "../steps/DocumentUpload";
-import {Completion} from "../steps/Completion";
+import { PersonalInfo } from "../steps/StudentInfo"
+import { ParentInfo } from "../steps/ParentsInfo"
+import { FeesInfo } from "../steps/FeesInfo"
+import {DocumentInfo  } from "../steps/DocumentUpload"
+import { Completion } from "../steps/Completion"
 
 const steps = [
   "Student Info",
@@ -23,95 +19,89 @@ const steps = [
   "Fees Info",
   "Document Upload",
   "Completed",
-];
+]
 
 const stepComponents = [
   PersonalInfo,
   AddressInfo,
   ParentInfo,
   FeesInfo,
-  DocumentInfo,
+ DocumentInfo,
   Completion,
-];
+]
 
 const CreateStudentUI: FC = () => {
-  const stepperRef = useRef<HTMLDivElement | null>(null);
-  const [currentStep, setCurrentStep] = useState(0);
+  const stepperRef = useRef<HTMLDivElement | null>(null)
+  const [currentStep, setCurrentStep] = useState(0)
 
   useEffect(() => {
-    updateStepClasses();
-  }, [currentStep]);
+    updateStepClasses()
+  }, [currentStep])
 
   const updateStepClasses = () => {
-    const stepperElement = stepperRef.current;
-    if (!stepperElement) return;
+    const stepperElement = stepperRef.current
+    if (!stepperElement) return
 
-    const allNavItems = stepperElement.querySelectorAll(
-      '[data-kt-stepper-element="nav"]'
-    );
-    const allContents = stepperElement.querySelectorAll(
-      '[data-kt-stepper-element="content"]'
-    );
+    const allNavItems = stepperElement.querySelectorAll('[data-kt-stepper-element="nav"]')
+    const allContents = stepperElement.querySelectorAll('[data-kt-stepper-element="content"]')
 
     allNavItems.forEach((el, index) => {
-      el.classList.remove("current", "completed");
+      el.classList.remove("current", "completed")
       if (index < currentStep) {
-        el.classList.add("completed");
+        el.classList.add("completed")
       } else if (index === currentStep) {
-        el.classList.add("current");
+        el.classList.add("current")
       }
-    });
+    })
 
     allContents.forEach((el, index) => {
       if (index === currentStep) {
-        el.classList.add("current");
+        el.classList.add("current")
       } else {
-        el.classList.remove("current");
+        el.classList.remove("current")
       }
-    });
-  };
+    })
+  }
 
   const nextStep = async (
     validateForm: () => Promise<any>,
     setTouched: FormikHelpers<ICreateStudent>["setTouched"]
   ) => {
-    const errors = await validateForm();
-    const stepSchemaFields = Object.keys(
-      createStudentSchemas[currentStep]?.fields ?? {}
-    );
+    const errors = await validateForm()
+    const stepSchemaFields = Object.keys(createStudentSchemas[currentStep]?.fields ?? {})
 
     const hasStepErrors = stepSchemaFields.some((field) =>
       Object.keys(errors).includes(field)
-    );
+    )
 
     if (!hasStepErrors) {
-      setCurrentStep((prev) => prev + 1);
+      setCurrentStep((prev) => prev + 1)
     } else {
       const touchedFields = stepSchemaFields.reduce((acc, field) => {
-        acc[field] = true;
-        return acc;
-      }, {} as any);
+        acc[field] = true
+        return acc
+      }, {} as any)
 
-      setTouched(touchedFields);
+      setTouched(touchedFields)
     }
-  };
+  }
 
   const prevStep = () => {
     if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
+      setCurrentStep((prev) => prev - 1)
     }
-  };
+  }
 
   const cancel = () => {
-    setCurrentStep(0);
-  };
+    setCurrentStep(0)
+  }
 
   const handleSubmit = async (values: ICreateStudent) => {
-    console.log("🎉 Submitted student:", values);
-    setCurrentStep((prev) => prev + 1); // Go to "Completed" screen
-  };
+    console.log("🎉 Submitted student:", values)
+    setCurrentStep((prev) => prev + 1) // Go to "Completed" screen
+  }
 
-  const CurrentStepComponent = stepComponents[currentStep];
+  const CurrentStepComponent = stepComponents[currentStep]
 
   return (
     <>
@@ -142,15 +132,10 @@ const CreateStudentUI: FC = () => {
                 validationSchema={createStudentSchemas[currentStep]}
                 onSubmit={handleSubmit}
               >
-                {({validateForm, setTouched}) => (
+                {({ validateForm, setTouched }) => (
                   <Form className="mx-auto mw-800px w-100 pt-15 pb-10">
                     {/* Step Content */}
                     <div data-kt-stepper-element="content">
-                      {/* {currentStep === 4 ? ( // Document Upload step index
-                        <DocumentInfo onUpload={() => {}} studentId={1} /> // replace 1 with real id later
-                      ) : (
-                        <CurrentStepComponent />
-                      )} */}
                       <CurrentStepComponent />
                     </div>
 
@@ -163,16 +148,14 @@ const CreateStudentUI: FC = () => {
                           onClick={prevStep}
                           disabled={currentStep === 0}
                         >
-                          <KTIcon iconName="arrow-left" className="fs-4 me-1" />{" "}
-                          Back
+                          <KTIcon iconName="arrow-left" className="fs-4 me-1" /> Back
                         </button>
                         <button
                           type="button"
                           className="btn btn-lg btn-light-secondary"
                           onClick={cancel}
                         >
-                          <KTIcon iconName="cross" className="fs-4 me-1" />{" "}
-                          Cancel
+                          <KTIcon iconName="cross" className="fs-4 me-1" /> Cancel
                         </button>
                       </div>
                       {currentStep < steps.length - 1 ? (
@@ -182,13 +165,8 @@ const CreateStudentUI: FC = () => {
                           onClick={() => nextStep(validateForm, setTouched)}
                         >
                           <span className="indicator-label">
-                            {currentStep === steps.length - 2
-                              ? "Submit"
-                              : "Continue"}
-                            <KTIcon
-                              iconName="arrow-right"
-                              className="fs-3 ms-2 me-0"
-                            />
+                            {currentStep === steps.length - 2 ? "Submit" : "Continue"}
+                            <KTIcon iconName="arrow-right" className="fs-3 ms-2 me-0" />
                           </span>
                         </button>
                       ) : null}
@@ -201,7 +179,7 @@ const CreateStudentUI: FC = () => {
         </div>
       </Content>
     </>
-  );
-};
+  )
+}
 
-export {CreateStudentUI};
+export { CreateStudentUI }
