@@ -1,8 +1,8 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom"
-import { PageLink, PageTitle } from "../../../_metronic/layout/core"
-import { AllStudentWrapper } from "./studentsWrapper"
-import { CreateStudentUI } from "./component/CreateStudentUI"
-import { EditPersonalInfo } from "./component/EditPersonalInfo"
+import {Navigate, Outlet, Route, Routes} from "react-router-dom";
+import {PageLink, PageTitle} from "../../../_metronic/layout/core";
+import {AllStudentWrapper} from "./studentsWrapper";
+import {CreateStudentUI} from "./component/CreateStudentUI";
+import {EditPersonalInfo} from "./component/EditPersonalInfo";
 
 const allStudentBreadcrumbs: Array<PageLink> = [
   {
@@ -17,7 +17,7 @@ const allStudentBreadcrumbs: Array<PageLink> = [
     isSeparator: true,
     isActive: false,
   },
-]
+];
 
 const AllStudentPage = () => {
   return (
@@ -27,36 +27,48 @@ const AllStudentPage = () => {
           path="list"
           element={
             <>
-              <PageTitle breadcrumbs={allStudentBreadcrumbs}>All Students</PageTitle>
+              <PageTitle breadcrumbs={allStudentBreadcrumbs}>
+                All Students
+              </PageTitle>
               <AllStudentWrapper />
             </>
           }
         />
-           <Route
-                    path="editpersonslinfo"
-                    element={
-                        <>
-                            <PageTitle breadcrumbs={[...allStudentBreadcrumbs , {
-                                title: "Edit PersonslInfo", isActive: false,
-                                path: "editpersonslinfo"
-                            }]}>Personsl Info</PageTitle>
-                            <EditPersonalInfo />
-                        </>
-                    }
-                />
-         <Route
-                    path="create"
-                    element={
-                        <>
-                            <PageTitle breadcrumbs={allStudentBreadcrumbs}>Student Create</PageTitle>
-                            < CreateStudentUI />
-                        </>
-                    }
-                />
+        <Route
+          path="editpersonslinfo"
+          element={
+            <>
+              <PageTitle
+                breadcrumbs={[
+                  ...allStudentBreadcrumbs,
+                  {
+                    title: "Edit PersonslInfo",
+                    isActive: false,
+                    path: "editpersonslinfo",
+                  },
+                ]}
+              >
+                Personsl Info
+              </PageTitle>
+              <EditPersonalInfo />
+            </>
+          }
+        />
+        <Route
+          path="create"
+          element={
+            <>
+              <PageTitle breadcrumbs={allStudentBreadcrumbs}>
+                Student Create
+              </PageTitle>
+              <CreateStudentUI />
+            </>
+          }
+        />
         <Route index element={<Navigate to="/student/list" />} />
       </Route>
     </Routes>
-  )
-}
+  );
+};
 
-export default AllStudentPage
+export default AllStudentPage;
